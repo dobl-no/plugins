@@ -1,6 +1,6 @@
 ---
 name: avstem-og-lukk
-description: Bokfør banktransaksjonene i Dobbel, forklar det som gjenstår, og lukk bankavstemmingen for perioden når portene er åpne. Bruk når brukeren vil avstemme banken, bokføre kontoutskriften, eller gjøre måneden ferdig.
+description: Bokfør banktransaksjonene i Dobl, forklar det som gjenstår, og lukk bankavstemmingen for perioden når portene er åpne. Bruk når brukeren vil avstemme banken, bokføre kontoutskriften, eller gjøre måneden ferdig.
 argument-hint: "[bankkonto] [periode, f.eks. 2026-08]"
 ---
 
@@ -31,7 +31,9 @@ bankAccountId, periode)` gir:
 1. **Gjør den opp et bokført kjøp?** `list_purchases` på beløp og
    leverandør → `commit_bank_match(purchaseId)`.
 2. **Gjør den opp en kundefaktura?** `list_invoices` på beløp og KID →
-   `commit_bank_match(invoiceId)`.
+   `commit_bank_match(invoiceId)`. Gjør den opp flere fakturaer, eller
+   bare en del av én: `commit_bank_match(allocations)` med én linje per
+   faktura; en liten rest som et bankgebyr føres med `remainder`.
 3. **Finnes bilaget allerede** (lønn, MVA-oppgjør, manuelt bilag)?
    `search_vouchers` → `commit_bank_match(voucherId)`.
 4. **Bankgebyr, renter, overføring mellom egne kontoer?**
@@ -66,7 +68,7 @@ bilagsføring mot kontoen, og bare en admin kan gjenåpne. Bekreft derfor
 med brukeren i chatten før du kaller den, selv på `FULL`.
 
 Mangler du scope eller nivå: si at perioden er klar til lukking, og at
-brukeren lukker den under Bank i Dobbel.
+brukeren lukker den under Bank i Dobl.
 
 ## Rapport
 

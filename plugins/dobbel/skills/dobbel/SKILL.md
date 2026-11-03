@@ -1,18 +1,21 @@
 ---
 name: dobbel
-description: Kjerneregler for å jobbe i Dobbel, et norsk regnskapssystem for små AS og holdingselskap, via MCP. Bruk alltid før du leser, bokfører, avstemmer eller rapporterer i Dobbel — den sier hva du gjør først, hvilke porter som styrer hva du får gjøre, og hvilke regler du aldri bryter.
+description: Kjerneregler for å jobbe i Dobl (uttales «dobbel», het tidligere Dobbel), et norsk regnskapssystem for små AS og holdingselskap, via MCP. Bruk alltid før du leser, bokfører, avstemmer eller rapporterer i Dobl — den sier hva du gjør først, hvilke porter som styrer hva du får gjøre, og hvilke regler du aldri bryter.
 ---
 
-# Dobbel for AI-agenter
+# Dobl for AI-agenter
 
-Dobbel er et AI-først regnskapssystem for små norske aksjeselskap og
+Dobl er et AI-drevet regnskapssystem for små norske aksjeselskap og
 holdingselskap: NS 4102-kontoplan, norsk MVA, SAF-T og innlevering til
-Altinn. Pluginen kobler deg til Dobbels MCP-server på
-`https://app.dobl.no/api/mcp`. Alt i Dobbel er på norsk bokmål — svar
+Altinn. Pluginen kobler deg til Dobls MCP-server på
+`https://app.dobl.no/api/mcp`. Alt i Dobl er på norsk bokmål — svar
 brukeren på det språket de skriver.
 
+Produktet het tidligere Dobbel. Skriv alltid «Dobl» når du omtaler det.
+Plugin-id-en og kommandoene (`/dobbel:…`) har beholdt det gamle navnet.
+
 Den fullstendige og alltid oppdaterte håndboken ligger på
-`https://app.dobl.no/skill.md` (versjon i `https://app.dobl.no/skills/manifest.json`).
+`https://dobl.no/skill.md` (versjon i `https://dobl.no/skills/manifest.json`).
 Hent den når du trenger hele verktøylisten, scope-tabellen eller en
 arbeidsflyt som ikke står i denne pluginen. Denne skillen er den korte
 versjonen som alltid gjelder.
@@ -31,14 +34,22 @@ versjonen som alltid gjelder.
 `company_profile = holding` betyr at salgsverktøyene (faktura, kunder,
 produkter) er slått av for selskapet.
 
+Er brukeren koblet til som ansatt, gjelder bare egne data: ansattinfo og
+lønnsslipper (`get_my_profile`), timer (`list_my_time`,
+`create_my_time_entry`) og reiser og utlegg (`get_my_context`,
+`list_my_claims`, `create_travel_claim`, `create_expense_claim`). Reiser
+og utlegg blir utkast som den ansatte selv leverer i Dobl.
+
 ## To porter: scope og automasjonsnivå
 
 **Scopes** velges av brukeren ved innlogging. Trygge scopes (lese, lage
 utkast, stamdata) er forhåndsvalgt. Farlige scopes må brukeren krysse av
 selv: `vouchers:post`, `invoices:send`, `annual:generate`, `bank:pay`,
-`bank:reconcile`, `filings:submit`. Mangler du et scope, svarer verktøyet
-`insufficient_scope` — be brukeren koble til på nytt med tilgangen
-avkrysset. Ikke prøv omveier.
+`bank:reconcile`, `filings:submit`, `payroll:submit`. Lønnsscopene
+(`payroll:read`, `payroll:write`) er trygge, men heller ikke forhåndsvalgt
+— de gir tilgang til opplysninger om de ansatte. Mangler du et scope,
+svarer verktøyet `insufficient_scope` — be brukeren koble til på nytt med
+tilgangen avkrysset. Ikke prøv omveier.
 
 **Automasjonsnivå** settes av admin per selskap under «AI-agenter»:
 
@@ -55,7 +66,8 @@ selv.
 ## Regler du aldri bryter
 
 1. **Posterte bilag endres eller slettes aldri.** Feil rettes med
-   `post_correction_voucher`. Utkast kan endres og slettes.
+   `post_correction_voucher`. Utkast kan endres og slettes. En feilført
+   kapitalhendelse (utbytte) reverseres med `reverse_capital_event`.
 2. **Ingen tall uten kilde.** Finn aldri på beløp, datoer, MVA-sats,
    leverandør eller kontonummer. Står det ikke i dokumentet, banklinjen
    eller brukerens ord, spør du.
@@ -71,20 +83,27 @@ selv.
    for egenkapital og aksjer; `depreciate_asset` for avskrivning.
 5. **En banklinje beviser at penger flyttet seg, ikke hvorfor.** Mangler
    dokumentasjonen, bruk `request_missing_document`. Gjett aldri en
-   kostnadskonto for å få avstemmingen til å gå opp.
+   kostnadskonto for å få avstemmingen til å gå opp. Skal linjen aldri i
+   regnskapet, `ignore_bank_transaction` med begrunnelse.
 6. **Datoer flyttes ikke** for å få noe til å stemme.
-7. **Pliktige oppgaver og betalinger er endelige.** Kjør alltid
-   `preview_*` først, vis brukeren resultatet, og send bare når brukeren
-   har sagt ja i denne samtalen.
+7. **Det som når noen utenfor Dobl, kan ikke tas tilbake:** sende
+   faktura eller purring, levere til Skatteetaten eller Altinn
+   (MVA-melding, a-melding, aksjonærregisteroppgave) og legge betalinger
+   til godkjenning i banken. Kjør `preview_*` først der det finnes, vis
+   brukeren mottaker, periode og beløp, og send bare når brukeren har
+   sagt ja i denne samtalen.
 8. **Stopp og spør** når periode, motpart, dokumentasjon eller ønsket
    behandling er uklar.
 9. **Alt du gjør logges** med `actor_type = agent`. Skriv beskrivelser et
    menneske forstår i hovedboken senere.
-10. **Slå opp i hjelpen framfor å gjette på hvordan Dobbel virker.**
+10. **Slå opp i hjelpen framfor å gjette på hvordan Dobl virker.**
     `search_help` søker i hjelpesenteret og gir deg hele artikler
     tilbake. Spør i hel setning — søket er laget for spørsmål, ikke
     stikkord. Får du `treff: 0`, er emnet ikke dokumentert ennå: si det
     til brukeren i stedet for å finne på et svar.
+11. **Mat, drikke, reise og gaver har et formål** (`purpose`) som
+    avgjør konto, MVA-fradrag og skattefradrag. Formålet står sjelden på
+    kvitteringen — spør brukeren, ikke gjett.
 
 ## Formater
 
@@ -105,6 +124,10 @@ selv.
   lukk perioden når portene er åpne.
 - `/dobbel:gjennomga` — les-bare gjennomgang av en periode mot
   originaldokumentene, uten å endre noe.
+
+MVA-termin, årsavslutning, fakturering, utbytte og lønn med a-melding
+har egne oppskrifter i håndboken på `https://dobl.no/skill.md`. Hent den
+før du starter på en av dem.
 
 Spør brukeren «hva må jeg gjøre?», start med `list_pending_work`: den
 sier hva som venter, og per kategori om du kan ta det selv

@@ -1,12 +1,12 @@
 ---
 name: bokfor-innboks
-description: Registrer kjøp i Dobbel fra kvitteringer og inngående fakturaer — fra filer brukeren peker på, eller fra dokumenter som allerede ligger i innboksen. Bruk når brukeren vil bokføre kvitteringer, fakturaer eller «det som ligger i innboksen».
+description: Registrer kjøp i Dobl fra kvitteringer og inngående fakturaer — fra filer brukeren peker på, eller fra dokumenter som allerede ligger i innboksen. Bruk når brukeren vil bokføre kvitteringer, fakturaer eller «det som ligger i innboksen».
 argument-hint: "[mappe eller filer] eller «innboksen»"
 ---
 
 # Bokfør innboksen
 
-Hvert kjøp i Dobbel er konsekvens av ett dokument. Du laster opp, leser,
+Hvert kjøp i Dobl er konsekvens av ett dokument. Du laster opp, leser,
 bekrefter mot originalen, og lager et utkast. Mennesket godkjenner i
 appen, med mindre selskapet står på «Gjøre».
 
@@ -25,7 +25,7 @@ Rapporten til slutt skal ha like mange rader.
 
 1. `prepare_inbox_upload` → signert engangs-URL og `fileId`.
 2. Last opp filens bytes med HTTP PUT til URL-en. Dette skjer utenom
-   samtalen (curl eller tilsvarende). Ingenting er registrert i Dobbel
+   samtalen (curl eller tilsvarende). Ingenting er registrert i Dobl
    ennå.
 3. `register_inbox_upload(fileId)` → innbokselement. AI-lesingen starter i
    bakgrunnen. Kallet er idempotent: samme `fileId` gir samme element.
@@ -43,10 +43,12 @@ Rapporten til slutt skal ha like mange rader.
    `create_supplier`. Finnes den: `list_suppliers` og bruk id-en.
 8. Velg konto. `suggest_account` gir forslag; sjekk `recommendedTemplates`
    først. MVA-kode fra `list_vat_codes` — selskaper uten MVA-registrering
-   får aldri fradrag.
+   får aldri fradrag. Er det mat, drikke, reise eller gaver, spør
+   brukeren om formålet og send det som `purpose` på linjen — det
+   avgjør konto og fradrag, og står sjelden på kvitteringen.
 9. `create_purchase(companyId, fileId, type, …)` → kjøpsutkast med
    debet/kredit-linjer.
-10. På `DRAFT`: stopp her. Si at utkastet venter på godkjenning i Dobbel.
+10. På `DRAFT`: stopp her. Si at utkastet venter på godkjenning i Dobl.
     På `FULL`: `approve_voucher` posterer. Bekreft likevel i chatten når
     beløpet er stort eller konteringen usikker.
 
@@ -59,6 +61,11 @@ Rapporten til slutt skal ha like mange rader.
   per sats.
 - **Utenlandsk leverandør uten norsk MVA:** omvendt avgiftsplikt. Ikke
   gjett kode — spør, eller pek på `preview_reverse_charge_vat`.
+- **Kostnaden gjelder flere måneder** (husleie, forsikring,
+  årsabonnement): sett `accrual` på linjen i `create_purchase`, med
+  perioden slik den står i dokumentet. Følger perioden ikke
+  månedsskiftet, bruk `distribution: "daily"` med `startDate` og
+  `endDate`.
 - **Privat utlegg** som skal refunderes eieren er fortsatt et kjøp med
   dokument; motkonto er mellomregning, ikke bank.
 - **Dokumentet er ikke et kjøp** (kontrakt, tilbud, avtale): ikke opprett

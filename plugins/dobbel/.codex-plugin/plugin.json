@@ -1,15 +1,16 @@
 {
   "name": "dobbel",
-  "version": "0.2.2",
-  "description": "Regnskap for små norske AS og holdingselskap. Les regnskapet, registrer kjøp fra kvitteringer, bokfør banken, hent rapporter og forbered MVA og årsoppgjør. Alt agenten fører blir utkast du godkjenner.",
+  "version": "0.3.0",
+  "description": "Regnskap for små norske AS og holdingselskap i Dobl (tidligere Dobbel). Les regnskapet, registrer kjøp fra kvitteringer, bokfør banken, hent rapporter og forbered MVA og årsoppgjør. Alt agenten fører blir utkast du godkjenner.",
   "author": {
     "name": "Dobbel AS",
     "url": "https://dobl.no/"
   },
-  "homepage": "https://app.dobl.no/agenter",
-  "repository": "https://github.com/dobbel-as/plugins",
+  "homepage": "https://dobl.no/agenter",
+  "repository": "https://github.com/dobl-no/plugins",
   "license": "Apache-2.0",
   "keywords": [
+    "dobl",
     "dobbel",
     "regnskap",
     "bokføring",
@@ -25,9 +26,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Dobbel",
-    "shortDescription": "Før regnskapet i Dobbel med din egen agent — du godkjenner.",
-    "longDescription": "Dobbel er et AI-først regnskapssystem for små norske aksjeselskap og holdingselskap: NS 4102-kontoplan, norsk MVA, SAF-T og innlevering til Altinn. Med pluginen kan agenten din lese regnskapet, registrere kjøp fra kvitteringer, bokføre banken, hente rapporter og forberede MVA-melding og årsoppgjør. Alt agenten fører blir utkast som du godkjenner i Dobbel, og hvert kall logges som en agent-handling.",
+    "displayName": "Dobl",
+    "shortDescription": "Før regnskapet i Dobl med din egen agent — du godkjenner.",
+    "longDescription": "Dobl (uttales «dobbel», het tidligere Dobbel) er et AI-drevet regnskapssystem for små norske aksjeselskap og holdingselskap: NS 4102-kontoplan, norsk MVA, SAF-T og innlevering til Altinn. Med pluginen kan agenten din lese regnskapet, registrere kjøp fra kvitteringer, bokføre banken, hente rapporter og forberede MVA-melding og årsoppgjør. Alt agenten fører blir utkast som du godkjenner i Dobl, og hvert kall logges som en agent-handling.",
     "developerName": "Dobbel AS",
     "category": "Finance",
     "capabilities": [
@@ -40,7 +41,7 @@
     "termsOfServiceURL": "https://dobl.no/vilkar",
     "defaultPrompt": [
       "Hva gjenstår i regnskapet mitt akkurat nå?",
-      "Registrer kvitteringene i denne mappen som kjøp i Dobbel.",
+      "Registrer kvitteringene i denne mappen som kjøp i Dobl.",
       "Bokfør banktransaksjonene for forrige måned og si hva som mangler dokumentasjon."
     ],
     "brandColor": "#2A1B3D",

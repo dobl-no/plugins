@@ -26,6 +26,16 @@ jobs:
           v2=$(python3 -c "import json;print(json.load(open('plugins/dobbel/.codex-plugin/plugin.json'))['version'])")
           v3=$(python3 -c "import json;print(json.load(open('.claude-plugin/marketplace.json'))['plugins'][0]['version'])")
           test "$v1" = "$v2" -a "$v1" = "$v3" && echo "versjon $v1"
+      - name: Merkenavnet er Dobl
+        run: |
+          # «Dobbel AS» er juridisk navn og «tidligere Dobbel» er aliaset.
+          # Tekniske id-er med små bokstaver (dobbel@dobbel, /dobbel:…) treffes ikke.
+          if grep -rnP '(?<!tidligere )\bDobbel(s)?\b(?! AS)' README.md .claude-plugin .agents plugins/dobbel \
+               --include='*.md' --include='*.json'; then
+            echo "Skriv «Dobl» i tekst brukerne ser (se README, «Navnet og de tekniske id-ene»)."
+            exit 1
+          fi
+          echo "ok"
       - name: Claude Code plugin-validering
         run: |
           npm install -g @anthropic-ai/claude-code
