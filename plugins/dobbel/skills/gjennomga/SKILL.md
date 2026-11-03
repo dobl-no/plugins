@@ -1,13 +1,13 @@
 ---
 name: gjennomga
-description: Uavhengig, les-bare gjennomgang av en periode i Dobbel mot originaldokumentene — hvert bilag, hver banklinje, hvert innbokselement får en status. Bruk når brukeren vil kontrollere det som er ført, før en MVA-termin, før årsavslutning, eller etter at en agent har bokført.
+description: Uavhengig, les-bare gjennomgang av en periode i Dobl mot originaldokumentene — hvert bilag, hver banklinje, hvert innbokselement får en status. Bruk når brukeren vil kontrollere det som er ført, før en MVA-termin, før årsavslutning, eller etter at en agent har bokført.
 argument-hint: "[periode, f.eks. 2026-Q2] [omfang: alt | bank | kjøp]"
 ---
 
 # Gjennomgå
 
 Dette er kontrollen, ikke bokføringen. Du endrer ingenting. Du sammenligner
-det som står i Dobbel med det dokumentene faktisk sier, og gir hvert
+det som står i Dobl med det dokumentene faktisk sier, og gir hvert
 objekt en status. Konklusjoner du ikke kan begrunne fra en kilde, er
 `ukjent`, ikke `ok`.
 
@@ -110,7 +110,7 @@ Skriv for et menneske, på brukerens språk:
 1. Scope, nevner, og om gjennomgangen er komplett eller delvis.
 2. Tabell med én rad per objekt: id, dato, beløp, status, funn.
 3. Funnene som krever handling, gruppert: `feil` først, så
-   `trenger deg`, så `ukjent`. For hver: hva kilden sier, hva Dobbel
+   `trenger deg`, så `ukjent`. For hver: hva kilden sier, hva Dobl
    sier, og anbefalt rettelse (`post_correction_voucher`, nytt kjøp,
    `request_missing_document` …).
 4. Aggregater: bank ties / ties ikke, MVA-grunnlag rimelig / ikke.

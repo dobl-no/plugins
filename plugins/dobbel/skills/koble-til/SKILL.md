@@ -1,9 +1,9 @@
 ---
 name: koble-til
-description: Sjekk at Dobbel-koblingen virker og hjelp brukeren gjennom innloggingen. Bruk når Dobbel-verktøyene mangler, når et kall feiler med 401 eller insufficient_scope, eller når brukeren ber om å koble Dobbel til agenten.
+description: Sjekk at Dobl-koblingen virker og hjelp brukeren gjennom innloggingen. Bruk når Dobl-verktøyene mangler, når et kall feiler med 401 eller insufficient_scope, eller når brukeren ber om å koble Dobl (tidligere Dobbel) til agenten.
 ---
 
-# Koble til Dobbel
+# Koble til Dobl
 
 Målet er en aktiv kobling der `get_context` svarer med minst ett selskap.
 Du kan ikke logge inn på vegne av brukeren. Din jobb er å si nøyaktig hva
@@ -29,7 +29,7 @@ Innloggingen er OAuth i nettleseren, og går slik:
 - **Claude Code:** kjør `/mcp`, velg `dobbel`, og følg nettleseren.
 - **Codex:** kjør `codex mcp login dobbel` i terminalen.
 
-I nettleseren logger brukeren inn i Dobbel, velger hvilke selskap
+I nettleseren logger brukeren inn i Dobl, velger hvilke selskap
 koblingen skal dekke, og krysser av tilganger. Trygge tilganger (lese,
 lage utkast, stamdata) er forhåndsvalgt. Tilganger som gjør noe endelig
 må brukeren krysse av selv:
@@ -42,6 +42,12 @@ må brukeren krysse av selv:
 | `bank:reconcile` | lukke bankavstemminger |
 | `annual:generate` | årsoppgjør og SAF-T |
 | `filings:submit` | sende MVA-melding og aksjonærregisteroppgave til Skatteetaten |
+| `payroll:submit` | sende a-meldingen til Skatteetaten |
+
+Lønnsscopene `payroll:read` og `payroll:write` er trygge, men heller ikke
+forhåndsvalgt, fordi de gir tilgang til opplysninger om de ansatte.
+Oppgaver med lønn, ansatte eller skattekort trenger dem, og lønn må være
+slått på under Innstillinger → Moduler i Dobl.
 
 Si til brukeren hvilke av disse oppgaven faktisk trenger, så de ikke gir
 mer enn nødvendig. Standard er nok for å lese, registrere kjøp som utkast
@@ -56,7 +62,7 @@ Kall `get_context` på nytt. Rapporter:
 - scopes, og om noen oppgaven trenger mangler
 
 Mangler et scope, kan brukeren ikke legge det til i etterkant: koblingen
-må fjernes under «AI-agenter» i Dobbel og lages på nytt med tilgangen
+må fjernes under «AI-agenter» i Dobl og lages på nytt med tilgangen
 avkrysset.
 
 ## Feilsøking
@@ -71,4 +77,4 @@ avkrysset.
 - **Innloggingen looper** — be brukeren fjerne koblingen i klienten og
   legge den til på nytt, og sjekke at minst ett selskap ble valgt.
 
-Mer: `https://app.dobl.no/hjelp/tilkoblinger`.
+Mer: `https://hjelp.dobl.no/tilkoblinger`.
